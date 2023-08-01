@@ -9,6 +9,7 @@ SCREEN_WIDTH = 240
 SCREEN_HEIGHT = 160
 screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 pygame.display.set_caption("vPet v1.0a")
+#pygame.display.set_icon("icon.png")
 
 # game settings
 clock = pygame.time.Clock()

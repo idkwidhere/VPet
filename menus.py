@@ -20,4 +20,23 @@ class statsMenu():
 
     def draw(self):
         pygame.draw.rect(self.screen, (255, 255, 255), self.rect)
-        draw_text(self.screen, str(self.info.happiness), 20, (0,0,0), 10, 10)
+        draw_text(self.screen, "Happiness: " + str(self.info.happiness), 20, (0,0,0), 45, 25)
+        draw_text(self.screen, "Hunger: " + str(self.info.hunger), 20, (0,0,0), 45, 40)
+
+
+class foodMenu():
+    def __init__(self, screen, hunger, items):
+        self.hunger = hunger
+        self.items = items
+        self.screen = screen
+        self.w = 160
+        self.h = 120
+        self.open = False
+
+        self.rect = pygame.Rect(40, 20, self.w, self.h)
+
+
+    def draw(self):
+        pygame.draw.rect(self.screen, (255, 255, 255), self.rect)
+
+        draw_text(self.screen, "Meals: ", 20, (0,0,0), 45, 25)

@@ -113,7 +113,7 @@ class Button():
         self.image_hover = image_hover
         self.rect = self.image.get_rect()
         self.rect.topleft = (x, y)
-        self.open = False
+        self.clicked = False
         self.action = action
         self.open = False
 
@@ -187,8 +187,9 @@ need_interval = 10
 running = True
 while running:
 
-    screen.fill((119, 186, 128))
-    screen.blit(background, (0,0))
+    if(not stats_button.open):
+        screen.fill((119, 186, 128))
+        screen.blit(background, (0,0))
 
 
     #draw buttons
@@ -202,6 +203,11 @@ while running:
             menu = statsMenu(screen, mymon)
             menu.draw()
     #stats_button.open = False
+
+    if(eat_button.open):
+        if mymon.stage > 0:
+            menu = foodMenu(screen, mymon.hunger, mymon.items)
+            menu.draw()
 
     #age/hatch checks
     if stage == None:

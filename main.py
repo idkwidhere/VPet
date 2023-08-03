@@ -113,7 +113,7 @@ class Button():
         self.image_hover = image_hover
         self.rect = self.image.get_rect()
         self.rect.topleft = (x, y)
-        self.clicked = False
+        self.open = False
         self.action = action
         self.open = False
 
@@ -125,7 +125,7 @@ class Button():
             
             screen.blit(self.image_hover, (self.rect.x, self.rect.y))
             if(pygame.mouse.get_pressed()[0] == 1 and self.clicked == False):
-                self.clicked = True
+                self.open = True
                 
 
                 #pygame.mixer.Sound.play(button_sound)
@@ -136,9 +136,6 @@ class Button():
         else:
             screen.blit(self.image, (self.rect.x, self.rect.y))
 
-        if self.open:
-            menu = statsMenu(screen)
-            menu.draw()
     
 
 
@@ -161,13 +158,11 @@ def hatch(stage):
         return newmon
     
 
-csm = CutSceneManager(screen)
 
 def evolve(stage):
     match stage:
         case 0:
             print("evolve to a baby")
-            csm.start_cutscene(EggHatch(mymon))
             return Baby()
         case 1:
             print("evolve to a toddler")
@@ -201,6 +196,12 @@ while running:
     eat_button.draw()
     shop_button.draw()
 
+    #check buttons for menu
+    if(stats_button.open):
+        if mymon.stage > 0:
+            menu = statsMenu(screen, mymon)
+            menu.draw()
+    #stats_button.open = False
 
     #age/hatch checks
     if stage == None:

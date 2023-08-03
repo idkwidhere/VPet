@@ -1,19 +1,23 @@
 import pygame
 
+def draw_text(screen, text, size, color, x, y):
+    font = pygame.font.SysFont(None, size)
+    surface = font.render(text, True, color)
+    rect = surface.get_rect()
+    rect.topleft = (x, y)
+    screen.blit(surface, rect)
+
 
 class statsMenu():
-    def __init__(self, screen):
+    def __init__(self, screen, currentmon):
         self.w = 160
         self.h = 120
         self.screen = screen
-        self.menu_rect = pygame.Surface((self.w, self.h))
         self.open = False
+        self.info = currentmon
+
+        self.rect = pygame.Rect(40, 20, self.w, self.h)
 
     def draw(self):
-        self.menugroup = pygame.sprite.Group()
-        self.screen.blit(self.menu_rect, (40, 20))
-        #self.screen.blit(self.menu_rect, (40, 20))
-    #   self.menu_rect(self.screen, (255, 255, 255), [40, 20, self.w, self.h])
-
-    def destroy(self):
-        self.menugroup.clear(self.screen)
+        pygame.draw.rect(self.screen, (255, 255, 255), self.rect)
+        draw_text(self.screen, str(self.info.happiness), 20, (0,0,0), 10, 10)

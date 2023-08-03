@@ -1,5 +1,5 @@
 import pygame, sys
-import mons
+from cutscenes import CutSceneManager, EggHatch
 from random import randrange
 
 pygame.init()
@@ -16,13 +16,6 @@ background = pygame.image.load('./assets/backgrounds/background.png')
 clock = pygame.time.Clock()
 
 
-#text function
-font = pygame.font.SysFont("arialblack", 10)
-TEXT_COLOR = (255, 255, 255)
-def draw_text(text, font, text_color, x, y):
-    img = font.render(text, True, text_color)
-    screen.blit(img, (x, y))
-
 #########################MONS##########################
 from random import randint
 
@@ -30,6 +23,12 @@ class Egg():
     def __init__(self):
         self.lifespan = 15
         self.stage = 0
+
+        sprite = pygame.image.load('assets/mons/egg/egg00.png')
+        self.sprite = pygame.transform.scale(sprite, (64, 64))
+        self.rect = self.sprite.get_rect()
+        self.rect.topleft = [20, 20]
+        
 
 class Baby():
     def __init__(self):
@@ -45,9 +44,12 @@ class Baby():
             self.sex = "Female"
         self.items = ["rattle"]
 
+        sprite = pygame.image.load('./assets/mons/goobermon/goobermon0.png')
+        self.sprite = pygame.transform.scale(sprite, (64, 64))
+
 class Toddler():
     def __init__(self, sex, items):
-        self.lifespan = 15
+        self.lifespan = 60
         self.stage = 2
         self.happiness = 0
         self.max_happiness = 10
@@ -145,14 +147,18 @@ button_sound = pygame.mixer.Sound('./assets/sounds/buttons.wav')
 #hatching new egg
 def hatch(stage):
     if stage == None:
-        print("You hatched a new egg!")
+        print("You got an egg?!")
         newmon = Egg()
         return newmon
     
+
+csm = CutSceneManager(screen)
+
 def evolve(stage):
     match stage:
         case 0:
             print("evolve to a baby")
+            csm.start_cutscene(EggHatch(mymon))
             return Baby()
         case 1:
             print("evolve to a toddler")
@@ -179,6 +185,7 @@ while running:
     screen.fill((119, 186, 128))
     screen.blit(background, (0,0))
 
+
     #draw buttons
     stats_button.draw()
     eat_button.draw()
@@ -193,8 +200,10 @@ while running:
             pygame.time.set_timer(pygame.USEREVENT, 1000)
             cycle = mymon.lifespan
 
-    
+    #decrease happiness over time
 
+
+    
     for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
@@ -208,6 +217,7 @@ while running:
                     print(mymon.sex, mymon.items)
                     cycle = mymon.lifespan
                         
+    screen.blit(mymon.sprite, (20, 20))
 
     #print(cycle)
     #print(stage)

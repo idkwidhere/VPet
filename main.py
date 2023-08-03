@@ -1,6 +1,7 @@
 import pygame, sys
 from cutscenes import CutSceneManager, EggHatch
 from random import randrange
+from menus import *
 
 pygame.init()
 
@@ -32,7 +33,7 @@ class Egg():
 
 class Baby():
     def __init__(self):
-        self.lifespan = 15
+        self.lifespan = 60
         self.stage = 1
         self.happiness = 0
         self.max_happiness = 10
@@ -114,6 +115,7 @@ class Button():
         self.rect.topleft = (x, y)
         self.clicked = False
         self.action = action
+        self.open = False
 
     def draw(self):
         pos = pygame.mouse.get_pos()
@@ -124,13 +126,20 @@ class Button():
             screen.blit(self.image_hover, (self.rect.x, self.rect.y))
             if(pygame.mouse.get_pressed()[0] == 1 and self.clicked == False):
                 self.clicked = True
+                
+
                 #pygame.mixer.Sound.play(button_sound)
-                #action
+                
 
             if(pygame.mouse.get_pressed()[0] == 0):
                 self.clicked = False
         else:
             screen.blit(self.image, (self.rect.x, self.rect.y))
+
+        if self.open:
+            menu = statsMenu(screen)
+            menu.draw()
+    
 
 
 # create buttons for game
@@ -178,6 +187,7 @@ def evolve(stage):
 
 
 stage = None
+need_interval = 10
 
 running = True
 while running:
@@ -200,17 +210,31 @@ while running:
             pygame.time.set_timer(pygame.USEREVENT, 1000)
             cycle = mymon.lifespan
 
-    #decrease happiness over time
-
-
+    #decrease happiness over time and decrease hunger over time
+    if(mymon.stage > 0):
+        dec_happiness = randint(5, 10)
+        dec_hunger = randint(10, 20)
+        if need_interval < 0:
+            mymon.happiness -= randint(0, 1)
+            mymon.hunger -= randint(0, 1)
+            print("happiness: "+  str(mymon.happiness))
+            print("hunger: "+  str(mymon.hunger))
+            need_interval = 10
     
+    
+
+
     for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
                 sys.exit()
             if event.type == pygame.USEREVENT:
                 cycle -= 1
+                
                 print(cycle)
+
+                if mymon.stage > 0:
+                    need_interval -= 1
 
                 if cycle <= 0:
                     mymon = evolve(mymon.stage)

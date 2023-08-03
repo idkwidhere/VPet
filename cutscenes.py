@@ -18,7 +18,6 @@ class CutSceneManager:
 
         #drawing variables
         self.screen = screen
-        self.window_size = 0
     
     def start_cutscene(self, cutscene):
         if(cutscene.name not in self.cutscene_complete):

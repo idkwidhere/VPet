@@ -1,7 +1,7 @@
 import pygame, sys
 from cutscenes import CutSceneManager, EggHatch
 from random import randrange
-from menus import *
+from menus import statsMenu, foodMenu
 
 pygame.init()
 
@@ -44,6 +44,7 @@ class Baby():
         else:
             self.sex = "Female"
         self.items = ["rattle"]
+        self.food = ["bottle"]
 
         sprite = pygame.image.load('./assets/mons/goobermon/goobermon0.png')
         self.sprite = pygame.transform.scale(sprite, (64, 64))
@@ -223,7 +224,7 @@ while running:
             print("hunger: " +  str(mymon.hunger))
             need_interval = 10
     
-    
+
 
 
     for event in pygame.event.get():
@@ -256,7 +257,7 @@ while running:
 
     if(eat_button.open):
         if mymon.stage > 0:
-            menu = foodMenu(screen, mymon.hunger, mymon.items)
+            menu = foodMenu(screen, mymon.hunger, mymon.food)
             menu.draw()
 
     #print(cycle)

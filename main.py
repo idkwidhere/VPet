@@ -22,7 +22,7 @@ from random import randint
 
 class Egg():
     def __init__(self):
-        self.lifespan = 15
+        self.lifespan = 5
         self.stage = 0
 
         sprite = pygame.image.load('assets/mons/egg/egg00.png')
@@ -125,7 +125,12 @@ class Button():
             
             screen.blit(self.image_hover, (self.rect.x, self.rect.y))
             if(pygame.mouse.get_pressed()[0] == 1 and self.clicked == False):
-                self.open = True
+                self.clicked = True
+                if self.open == True:
+                    self.open = False
+                else:
+                    self.open = True
+                
                 
 
                 #pygame.mixer.Sound.play(button_sound)
@@ -187,9 +192,9 @@ need_interval = 10
 running = True
 while running:
 
-    if(not stats_button.open):
-        screen.fill((119, 186, 128))
-        screen.blit(background, (0,0))
+    pos = pygame.mouse.get_pos()
+    screen.fill((119, 186, 128))
+    screen.blit(background, (0,0))
 
 
     #draw buttons
@@ -197,17 +202,7 @@ while running:
     eat_button.draw()
     shop_button.draw()
 
-    #check buttons for menu
-    if(stats_button.open):
-        if mymon.stage > 0:
-            menu = statsMenu(screen, mymon)
-            menu.draw()
-    #stats_button.open = False
-
-    if(eat_button.open):
-        if mymon.stage > 0:
-            menu = foodMenu(screen, mymon.hunger, mymon.items)
-            menu.draw()
+    
 
     #age/hatch checks
     if stage == None:
@@ -224,8 +219,8 @@ while running:
         if need_interval < 0:
             mymon.happiness -= randint(0, 1)
             mymon.hunger -= randint(0, 1)
-            print("happiness: "+  str(mymon.happiness))
-            print("hunger: "+  str(mymon.hunger))
+            print("happiness: " +  str(mymon.happiness))
+            print("hunger: " +  str(mymon.hunger))
             need_interval = 10
     
     
@@ -249,6 +244,20 @@ while running:
                     cycle = mymon.lifespan
                         
     screen.blit(mymon.sprite, (20, 20))
+
+    #check buttons for menu
+    if(stats_button.open and stats_button.clicked == False):
+        if mymon.stage > 0:
+            menu = statsMenu(screen, mymon)
+            menu.draw()
+            
+
+    #stats_button.open = False
+
+    if(eat_button.open):
+        if mymon.stage > 0:
+            menu = foodMenu(screen, mymon.hunger, mymon.items)
+            menu.draw()
 
     #print(cycle)
     #print(stage)
